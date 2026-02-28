@@ -1,0 +1,21 @@
+# Training outputs (large binary files — copy manually via scp)
+outputs/defectbot-lora/
+outputs/defectbot-gguf/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+defectbot-env/
+.venv/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+/tmp/
+
+# Editor
+.vscode/
+.idea/

@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DefectBot — Field Inspection AI</title>
+
+  <!-- ======================================================
+       All styles inline — no external CSS dependencies
+  ====================================================== -->
+  <style>
+    /* ── Reset & Base ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #0d1117;
+      --surface:     #161b22;
+      --card:        #1e2a3a;
+      --card-hover:  #243347;
+      --accent:      #ff6b35;
+      --accent-dim:  #c94f22;
+      --text:        #e6edf3;
+      --text-dim:    #8b949e;
+      --border:      #30363d;
+      --bot-bg:      #1a2332;
+      --user-bg:     #2a1f1a;
+      --user-border: #ff6b3540;
+      --summary-bg:  #2a2208;
+      --summary-border: #ffb84d50;
+      --red:    #ff4444;
+      --orange: #ff8c00;
+      --blue:   #4a9eff;
+      --green:  #2dbd6e;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', sans-serif;
+      --mono: 'SF Mono', 'Fira Code', Consolas, monospace;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 15px;
+      line-height: 1.6;
+      overflow: hidden;
+    }
+
+    /* ── App Shell ──────────────────────────────────── */
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ── Header ─────────────────────────────────────── */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      gap: 12px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--accent);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-sub {
+      font-size: 11px;
+      color: var(--text-dim);
+      font-weight: 400;
+      display: block;
+      line-height: 1;
+    }
+
+    .header-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 600;
+      border: 1px solid;
+    }
+
+    .badge-ondevice {
+      color: var(--green);
+      border-color: #2dbd6e40;
+      background: #2dbd6e12;
+    }
+
+    .badge-demo {
+      color: var(--orange);
+      border-color: #ff8c0040;
+      background: #ff8c0012;
+      display: none;
+    }
+
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* ── Chat Area ──────────────────────────────────── */
+    .chat-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth;
+    }
+
+    .chat-area::-webkit-scrollbar { width: 4px; }
+    .chat-area::-webkit-scrollbar-track { background: transparent; }
+    .chat-area::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+    /* ── Message Bubbles ────────────────────────────── */
+    .message {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      animation: msg-in 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+
+    @keyframes msg-in {
+      from { opacity: 0; transform: translateY(12px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .message.user {
+      flex-direction: row-reverse;
+    }
+
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .avatar.bot {
+      background: linear-gradient(135deg, var(--accent), #e05520);
+    }
+
+    .avatar.user {
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+
+    .bubble-wrap {
+      max-width: 80%;
+      position: relative;
+    }
+
+    .bubble {
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      position: relative;
+      word-break: break-word;
+    }
+
+    .message.bot .bubble {
+      background: var(--bot-bg);
+      border: 1px solid var(--border);
+      border-radius: 2px var(--radius) var(--radius) var(--radius);
+    }
+
+    .message.user .bubble {
+      background: var(--user-bg);
+      border: 1px solid var(--user-border);
+      border-radius: var(--radius) 2px var(--radius) var(--radius);
+    }
+
+    /* Image attachment in user bubble */
+    .bubble .img-preview {
+      max-width: 220px;
+      max-height: 180px;
+      border-radius: var(--radius-sm);
+      display: block;
+      margin-bottom: 8px;
+      object-fit: cover;
+      border: 1px solid var(--border);
+    }
+
+    /* Copy button on hover */
+    .copy-btn {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      border-radius: 6px;
+      padding: 2px 7px;
+      font-size: 11px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.15s, background 0.15s;
+    }
+
+    .bubble-wrap:hover .copy-btn { opacity: 1; }
+
+    .copy-btn:hover {
+      background: var(--card-hover);
+      color: var(--text);
+    }
+
+    .copy-btn.copied {
+      color: var(--green);
+      opacity: 1;
+    }
+
+    /* ── Manager Summary Card ───────────────────────── */
+    .summary-card {
+      background: var(--summary-bg);
+      border: 1px solid var(--summary-border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-top: 12px;
+    }
+
+    .summary-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .summary-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      color: #ffb84d;
+    }
+
+    .severity-badge {
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .severity-CRITICAL { background: #ff444422; color: #ff4444; border: 1px solid #ff444440; }
+    .severity-HIGH     { background: #ff8c0022; color: #ff8c00; border: 1px solid #ff8c0040; }
+    .severity-MEDIUM   { background: #4a9eff22; color: #4a9eff; border: 1px solid #4a9eff40; }
+    .severity-LOW      { background: #2dbd6e22; color: #2dbd6e; border: 1px solid #2dbd6e40; }
+
+    .summary-body {
+      font-size: 13.5px;
+      line-height: 1.65;
+      color: #d4be8a;
+      white-space: pre-wrap;
+    }
+
+    .export-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 10px;
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px solid #ffb84d60;
+      border-radius: 20px;
+      color: #ffb84d;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .export-btn:hover { background: #ffb84d15; }
+
+    /* ── Message Text Formatting ─────────────────────── */
+    .msg-text {
+      white-space: pre-wrap;
+      font-size: 14.5px;
+      line-height: 1.65;
+    }
+
+    .msg-text strong { color: var(--text); font-weight: 600; }
+
+    /* Inline code in messages */
+    .msg-text code {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      background: rgba(255,255,255,0.06);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    /* ── Typing Indicator ──────────────────────────── */
+    .typing-indicator {
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 0 20px 4px;
+    }
+
+    .typing-indicator.visible { display: flex; }
+
+    .typing-dots {
+      display: flex;
+      gap: 4px;
+      padding: 10px 14px;
+      background: var(--bot-bg);
+      border: 1px solid var(--border);
+      border-radius: 2px 12px 12px 12px;
+    }
+
+    .typing-dots span {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--text-dim);
+      animation: bounce 1.2s ease-in-out infinite;
+    }
+
+    .typing-dots span:nth-child(2) { animation-delay: 0.15s; }
+    .typing-dots span:nth-child(3) { animation-delay: 0.30s; }
+
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+      40%           { transform: translateY(-6px); opacity: 1; }
+    }
+
+    /* ── Quick Chips ────────────────────────────────── */
+    .chips-row {
+      display: flex;
+      gap: 6px;
+      padding: 8px 16px;
+      overflow-x: auto;
+      flex-shrink: 0;
+      border-top: 1px solid var(--border);
+      scrollbar-width: none;
+    }
+
+    .chips-row::-webkit-scrollbar { display: none; }
+
+    .chip {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 12.5px;
+      color: var(--text-dim);
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: all 0.15s;
+    }
+
+    .chip:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    /* ── Input Bar ──────────────────────────────────── */
+    .input-bar {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .input-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text-dim);
+      font-size: 17px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.15s;
+      position: relative;
+    }
+
+    .input-btn:hover {
+      background: var(--card-hover);
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .input-btn.recording {
+      background: #ff443322;
+      border-color: #ff4433;
+      color: #ff4433;
+      animation: record-pulse 1s ease-in-out infinite;
+    }
+
+    @keyframes record-pulse {
+      0%, 100% { box-shadow: 0 0 0 0 #ff443340; }
+      50%       { box-shadow: 0 0 0 6px transparent; }
+    }
+
+    /* Hidden file input */
+    #img-input { display: none; }
+
+    .input-wrap {
+      flex: 1;
+      position: relative;
+    }
+
+    #msg-input {
+      width: 100%;
+      min-height: 38px;
+      max-height: 120px;
+      resize: none;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14.5px;
+      padding: 8px 14px;
+      outline: none;
+      line-height: 1.5;
+      transition: border-color 0.15s;
+      overflow-y: auto;
+    }
+
+    #msg-input:focus { border-color: var(--accent); }
+    #msg-input::placeholder { color: var(--text-dim); }
+
+    #send-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: none;
+      background: var(--accent);
+      color: #fff;
+      font-size: 17px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    #send-btn:hover { background: var(--accent-dim); }
+    #send-btn:active { transform: scale(0.92); }
+    #send-btn:disabled { background: var(--border); cursor: not-allowed; transform: none; }
+
+    /* ── Voice status strip ─────────────────────────── */
+    .voice-status {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: #ff443312;
+      border-top: 1px solid #ff443330;
+      font-size: 12.5px;
+      color: #ff8877;
+      flex-shrink: 0;
+    }
+
+    .voice-status.visible { display: flex; }
+
+    .voice-wave {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+    }
+
+    .voice-wave span {
+      width: 3px;
+      background: #ff4433;
+      border-radius: 2px;
+      animation: wave 0.8s ease-in-out infinite;
+    }
+
+    .voice-wave span:nth-child(1) { height: 8px; animation-delay: 0s; }
+    .voice-wave span:nth-child(2) { height: 14px; animation-delay: 0.1s; }
+    .voice-wave span:nth-child(3) { height: 10px; animation-delay: 0.2s; }
+    .voice-wave span:nth-child(4) { height: 16px; animation-delay: 0.3s; }
+    .voice-wave span:nth-child(5) { height: 8px;  animation-delay: 0.15s; }
+
+    @keyframes wave {
+      0%, 100% { transform: scaleY(0.5); }
+      50%       { transform: scaleY(1); }
+    }
+
+    /* ── Utility ─────────────────────────────────────── */
+    .spacer { flex: 1; }
+
+    /* ── Welcome message ────────────────────────────── */
+    .welcome {
+      text-align: center;
+      padding: 32px 24px;
+      color: var(--text-dim);
+    }
+
+    .welcome-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .welcome h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .welcome p {
+      font-size: 14px;
+      max-width: 380px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .welcome-features {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .welcome-feat {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--text-dim);
+    }
+
+    /* ── Scrollbar ───────────────────────────────────── */
+    * { scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ══════════════════════════════════════════
+       HEADER
+  ═══════════════════════════════════════════ -->
+  <header>
+    <div class="brand">
+      <div class="brand-icon">🔍</div>
+      <div>
+        <span class="brand-name">DefectBot</span>
+        <span class="brand-sub">Building &amp; Mining Inspection AI</span>
+      </div>
+    </div>
+    <div class="header-badges">
+      <div class="badge badge-ondevice" id="badge-ondevice">
+        <span class="badge-dot"></span>
+        On-Device
+      </div>
+      <div class="badge badge-demo" id="badge-demo">
+        <span class="badge-dot"></span>
+        DEMO MODE
+      </div>
+    </div>
+  </header>
+
+  <!-- ══════════════════════════════════════════
+       CHAT MESSAGES
+  ═══════════════════════════════════════════ -->
+  <div class="chat-area" id="chat">
+
+    <!-- Welcome screen shown before first message -->
+    <div class="welcome" id="welcome">
+      <span class="welcome-icon">🏗️</span>
+      <h2>Welcome to DefectBot</h2>
+      <p>Describe a defect you've found on-site. I'll ask targeted follow-up questions, diagnose the root cause, and generate a manager-ready report.</p>
+      <div class="welcome-features">
+        <span class="welcome-feat">🏢 Buildings</span>
+        <span class="welcome-feat">⛏️ Mining</span>
+        <span class="welcome-feat">📷 Photo upload</span>
+        <span class="welcome-feat">🎙️ Voice input</span>
+        <span class="welcome-feat">📄 Report export</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Typing indicator lives outside chat area for clean positioning -->
+  <div class="typing-indicator" id="typing">
+    <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#ff6b35,#e05520);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;">🔍</div>
+    <div class="typing-dots">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       VOICE RECORDING STATUS
+  ═══════════════════════════════════════════ -->
+  <div class="voice-status" id="voice-status">
+    <div class="voice-wave">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+    Recording… Release mic to transcribe
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       QUICK PROMPT CHIPS
+  ═══════════════════════════════════════════ -->
+  <div class="chips-row">
+    <button class="chip" onclick="fillChip('Water stain on ceiling — brown patch, roughly 40cm diameter, near the AC unit')">💧 Water stain</button>
+    <button class="chip" onclick="fillChip('Diagonal crack in external brick wall, starting from window corner, approximately 3mm wide')">🏚️ Wall crack</button>
+    <button class="chip" onclick="fillChip('Black mould on bathroom ceiling and upper walls, multiple bathrooms affected on the same floor')">🟤 Mould</button>
+    <button class="chip" onclick="fillChip('Conveyor belt has a longitudinal tear running along the centre, about 2 metres long')">⚙️ Belt damage</button>
+    <button class="chip" onclick="fillChip('Oil puddle under the jaw crusher equipment, approximately 15–20 litres, discovered overnight')">🛢️ Oil leak</button>
+    <button class="chip" onclick="fillChip('Concrete spalling on carpark soffit — chunks falling, rusty steel rebar visible through the concrete')">🪨 Spalling</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       INPUT BAR
+  ═══════════════════════════════════════════ -->
+  <div class="input-bar">
+    <!-- Image upload -->
+    <input type="file" id="img-input" accept="image/*" />
+    <button class="input-btn" id="img-btn" title="Attach photo" onclick="document.getElementById('img-input').click()">📷</button>
+
+    <!-- Voice record (hold to record) -->
+    <button class="input-btn" id="mic-btn" title="Hold to record voice">🎙️</button>
+
+    <!-- Text input -->
+    <div class="input-wrap">
+      <textarea
+        id="msg-input"
+        rows="1"
+        placeholder="Describe the defect… (Enter to send, Shift+Enter for newline)"
+      ></textarea>
+    </div>
+
+    <!-- Send button -->
+    <button id="send-btn" title="Send" onclick="sendMessage()">➤</button>
+  </div>
+
+</div><!-- .app -->
+
+<!-- ══════════════════════════════════════════════════════════════
+     JAVASCRIPT — All logic inline
+═══════════════════════════════════════════════════════════════ -->
+<script>
+/* ================================================================
+   CONFIGURATION
+================================================================ */
+const OLLAMA_URL   = 'http://localhost:11434/api/chat';
+const OLLAMA_MODEL = 'defectbot';
+const WHISPER_URL  = 'http://localhost:2022/v1/audio/transcriptions';
+
+const SYSTEM_PROMPT = `You are DefectBot, an expert AI assistant specialised in building and mining defect inspection.
+
+Your role is to help field technicians diagnose defects accurately and generate professional reports.
+
+CONVERSATION FLOW:
+1. When a technician first reports a defect, ask 2–3 targeted, specific follow-up questions to gather key diagnostic details. Do NOT jump straight to a diagnosis without asking questions first.
+2. After the technician answers your questions, provide a clear DIAGNOSIS section with root cause and contributing factors.
+3. ALWAYS end your final response with a MANAGER SUMMARY section in exactly this format:
+
+MANAGER SUMMARY
+Severity: [CRITICAL/HIGH/MEDIUM/LOW]
+Issue: [one sentence describing the problem]
+Root Cause: [concise technical explanation]
+Immediate Action: [what must be done now]
+Recommended Timeline: [specific timeframe for repairs]
+Estimated Cost Impact: [dollar range]
+
+SEVERITY GUIDE:
+- CRITICAL: Immediate life-safety risk or imminent structural/equipment failure — stop work now
+- HIGH: Significant risk requiring urgent action within 24–48 hours
+- MEDIUM: Needs attention but can be planned within 1–4 weeks
+- LOW: Cosmetic or minor issue, schedule for next maintenance cycle
+
+Use specific technical terminology. Be concise but complete. Keep follow-up questions short and focused.`;
+
+/* ================================================================
+   STATE
+================================================================ */
+let messages = [{ role: 'system', content: SYSTEM_PROMPT }];
+let demoMode = false;
+let pendingImage = null;    // base64 data URL for attached image
+let mediaRecorder = null;
+let audioChunks = [];
+let autoSendTimer = null;
+let isProcessing = false;
+
+/* Demo responses cycled in demo mode */
+const DEMO_RESPONSES = [
+  `Thanks for reporting this. Before I can give a full diagnosis, I have a few questions:
+
+FOLLOW-UP QUESTIONS:
+1. How long has this issue been present — did it appear suddenly after a specific event (heavy rain, temperature change) or gradually over time?
+2. Can you describe the exact location more precisely — is it near any pipework, expansion joints, or building service penetrations?
+3. Is there any associated odour, discolouration, or visible moisture on adjacent surfaces?`,
+
+  `Based on the information provided, here is my assessment:
+
+DIAGNOSIS:
+Root cause: The observed conditions are consistent with moisture ingress from a failed building envelope element. The pattern and location suggest water is tracking from a primary entry point before appearing at the visible location.
+Contributing factors: Deferred maintenance, thermal cycling stress on sealants, and inadequate drainage contributing to the failure.
+
+MANAGER SUMMARY
+Severity: HIGH
+Issue: Active moisture infiltration through building envelope causing internal damage and potential structural degradation.
+Root Cause: Failed waterproofing or sealant element allowing water penetration — specific source requires on-site investigation.
+Immediate Action: Deploy water collection, investigate primary source, and engage specialist within 24–48 hours.
+Recommended Timeline: Source investigation within 48 hours; temporary repair within 1 week; permanent repair within 4 weeks.
+Estimated Cost Impact: $2,000–$15,000 depending on extent of damage and repair scope.`,
+
+  `FOLLOW-UP QUESTIONS:
+1. Is the equipment still operating, or has it been shut down since you noticed this?
+2. What is the approximate rate — a slow seep (drips per minute) or a steady flow?
+3. Has there been any recent maintenance, modification, or unusual operating condition on this equipment?`,
+
+  `This situation requires immediate attention. Here is my complete assessment:
+
+DIAGNOSIS:
+Root cause: Progressive mechanical or material failure has reached a critical threshold. The conditions described indicate the defect has moved beyond early warning stage and represents an active risk.
+Contributing factors: Service life exceedance, inadequate inspection intervals, and environmental exposure combining to accelerate failure progression.
+
+MANAGER SUMMARY
+Severity: CRITICAL
+Issue: Critical equipment or structural defect identified — immediate risk to personnel safety and operational continuity.
+Root Cause: Advanced material/structural degradation requiring emergency intervention.
+Immediate Action: STOP operations in the affected area immediately. Implement exclusion zone. Engage specialist within 4 hours.
+Recommended Timeline: Emergency assessment today; temporary make-safe within 24 hours; permanent repair per specialist recommendation.
+Estimated Cost Impact: $5,000–$50,000+ depending on extent and whether secondary damage has occurred.`
+];
+
+let demoIndex = 0;
+
+/* ================================================================
+   OLLAMA CONNECTION CHECK
+================================================================ */
+async function checkOllamaConnection() {
+  try {
+    const ctrl = new AbortController();
+    const id = setTimeout(() => ctrl.abort(), 3000); // 3s timeout
+    const resp = await fetch('http://localhost:11434/api/tags', { signal: ctrl.signal });
+    clearTimeout(id);
+    if (resp.ok) {
+      demoMode = false;
+      document.getElementById('badge-ondevice').style.display = 'flex';
+      document.getElementById('badge-demo').style.display = 'none';
+    } else {
+      enableDemoMode();
+    }
+  } catch {
+    enableDemoMode();
+  }
+}
+
+function enableDemoMode() {
+  demoMode = true;
+  document.getElementById('badge-ondevice').style.display = 'none';
+  document.getElementById('badge-demo').style.display = 'flex';
+  console.log('[DefectBot] Ollama not detected — demo mode active');
+}
+
+/* ================================================================
+   SEND MESSAGE
+================================================================ */
+async function sendMessage() {
+  if (isProcessing) return;
+
+  const input = document.getElementById('msg-input');
+  const text = input.value.trim();
+
+  if (!text && !pendingImage) return;
+
+  // Hide welcome screen on first message
+  const welcome = document.getElementById('welcome');
+  if (welcome) welcome.remove();
+
+  // Build user message content
+  let userContent = [];
+  if (pendingImage) {
+    // Include image as base64 for multimodal context (shown in UI; Ollama vision optional)
+    userContent.push({ type: 'image_url', image_url: { url: pendingImage } });
+  }
+  if (text) {
+    userContent.push({ type: 'text', text });
+  }
+
+  // For the conversation history (Ollama), use plain text.
+  // When only an image is attached, send a domain-specific prompt so the model
+  // responds as a defect inspector rather than giving a generic answer.
+  const userMsgText = text
+    || 'I have uploaded a photo of a defect at this site. Based on what you can see, please ask me 2–3 targeted follow-up questions to help identify the defect type (e.g. water ingress, structural crack, spalling, belt tear, oil leak, etc.), its exact location, and how severe it appears. Do not mention panels.';
+  messages.push({ role: 'user', content: userMsgText });
+
+  // Render user bubble — show friendly label, not the full injected prompt
+  const displayText = text || (pendingImage ? 'Photo uploaded — awaiting diagnosis' : userMsgText);
+  renderUserBubble(displayText, pendingImage);
+
+  // Clear input & image
+  input.value = '';
+  autoResize(input);
+  const imgToShow = pendingImage;
+  pendingImage = null;
+  document.getElementById('img-input').value = '';
+
+  // Show typing indicator
+  showTyping(true);
+  isProcessing = true;
+  document.getElementById('send-btn').disabled = true;
+
+  try {
+    let responseText;
+    if (demoMode) {
+      responseText = await getDemoResponse();
+    } else {
+      responseText = await streamOllamaResponse();
+    }
+
+    // Add to history
+    messages.push({ role: 'assistant', content: responseText });
+
+  } catch (err) {
+    console.error('[DefectBot] Error:', err);
+    showTyping(false);
+    renderBotBubble('⚠️ Connection error. ' + (demoMode ? '' : 'Switching to demo mode.'), false);
+    if (!demoMode) enableDemoMode();
+  } finally {
+    isProcessing = false;
+    document.getElementById('send-btn').disabled = false;
+    showTyping(false);
+    scrollToBottom();
+  }
+}
+
+/* ================================================================
+   OLLAMA STREAMING
+================================================================ */
+async function streamOllamaResponse() {
+  const resp = await fetch(OLLAMA_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: OLLAMA_MODEL,
+      messages: messages,
+      stream: true,
+      options: { temperature: 0.7, num_ctx: 4096 }
+    })
+  });
+
+  if (!resp.ok) {
+    throw new Error(`Ollama HTTP ${resp.status}`);
+  }
+
+  // Create bot bubble for streaming content
+  const { bubbleEl, textEl } = createBotBubble();
+  showTyping(false);
+
+  const reader = resp.body.getReader();
+  const decoder = new TextDecoder();
+  let fullText = '';
+
+  // Stream tokens
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+
+    const chunk = decoder.decode(value, { stream: true });
+    const lines = chunk.split('\n').filter(l => l.trim());
+
+    for (const line of lines) {
+      try {
+        const data = JSON.parse(line);
+        if (data.message?.content) {
+          fullText += data.message.content;
+          // Update streaming text
+          textEl.textContent = fullText;
+          scrollToBottom();
+        }
+        if (data.done) break;
+      } catch {
+        // Non-JSON line, skip
+      }
+    }
+  }
+
+  // Final render with formatting (manager summary detection)
+  renderFormattedText(bubbleEl, textEl, fullText);
+  return fullText;
+}
+
+/* ================================================================
+   DEMO MODE RESPONSE
+================================================================ */
+async function getDemoResponse() {
+  // Simulate thinking delay
+  await delay(1200 + Math.random() * 800);
+  showTyping(false);
+
+  const text = DEMO_RESPONSES[demoIndex % DEMO_RESPONSES.length];
+  demoIndex++;
+
+  renderBotBubble(text, true);
+  return text;
+}
+
+/* ================================================================
+   RENDER FUNCTIONS
+================================================================ */
+function renderUserBubble(text, imageDataUrl) {
+  const chat = document.getElementById('chat');
+  const div = document.createElement('div');
+  div.className = 'message user';
+
+  let imgHtml = '';
+  if (imageDataUrl) {
+    imgHtml = `<img class="img-preview" src="${imageDataUrl}" alt="Attached image" />`;
+  }
+
+  div.innerHTML = `
+    <div class="avatar user">👤</div>
+    <div class="bubble-wrap">
+      <div class="bubble">
+        ${imgHtml}
+        <div class="msg-text">${escapeHtml(text)}</div>
+      </div>
+      <button class="copy-btn" onclick="copyBubble(this, '${escapeForAttr(text)}')">Copy</button>
+    </div>
+  `;
+  chat.appendChild(div);
+  scrollToBottom();
+}
+
+function createBotBubble() {
+  const chat = document.getElementById('chat');
+  const div = document.createElement('div');
+  div.className = 'message bot';
+
+  div.innerHTML = `
+    <div class="avatar bot">🔍</div>
+    <div class="bubble-wrap">
+      <div class="bubble">
+        <div class="msg-text streaming-text"></div>
+      </div>
+      <button class="copy-btn" onclick="copyBubble(this, '')">Copy</button>
+    </div>
+  `;
+  chat.appendChild(div);
+  const textEl = div.querySelector('.streaming-text');
+  const bubbleEl = div.querySelector('.bubble');
+  scrollToBottom();
+  return { bubbleEl, textEl, wrapEl: div.querySelector('.bubble-wrap') };
+}
+
+function renderBotBubble(text, animate) {
+  const { bubbleEl, textEl } = createBotBubble();
+  renderFormattedText(bubbleEl, textEl, text);
+  scrollToBottom();
+}
+
+function renderFormattedText(bubbleEl, textEl, fullText) {
+  // Detect manager summary section
+  const summaryIdx = fullText.indexOf('MANAGER SUMMARY');
+
+  if (summaryIdx !== -1) {
+    const before = fullText.substring(0, summaryIdx).trim();
+    const summaryRaw = fullText.substring(summaryIdx);
+
+    // Render the pre-summary text
+    textEl.textContent = before || '';
+
+    // Extract severity
+    const severityMatch = summaryRaw.match(/Severity:\s*(CRITICAL|HIGH|MEDIUM|LOW)/i);
+    const severity = severityMatch ? severityMatch[1].toUpperCase() : 'MEDIUM';
+
+    // Create summary card
+    const card = document.createElement('div');
+    card.className = 'summary-card';
+
+    card.innerHTML = `
+      <div class="summary-card-header">
+        <span class="summary-title">📋 Manager Summary</span>
+        <span class="severity-badge severity-${severity}">${severity}</span>
+      </div>
+      <div class="summary-body">${escapeHtml(summaryRaw)}</div>
+      <button class="export-btn" onclick="exportReport(this, ${JSON.stringify(escapeHtml(summaryRaw)).replace(/"/g, '&quot;')})">
+        ⬇ Export Report
+      </button>
+    `;
+
+    bubbleEl.appendChild(card);
+
+    // Store full text on copy button
+    const wrapEl = bubbleEl.closest('.bubble-wrap');
+    if (wrapEl) {
+      const copyBtn = wrapEl.querySelector('.copy-btn');
+      if (copyBtn) {
+        copyBtn.setAttribute('data-text', fullText);
+        copyBtn.onclick = () => copyText(copyBtn, fullText);
+      }
+    }
+  } else {
+    // Plain response — just set text
+    textEl.textContent = fullText;
+
+    const wrapEl = bubbleEl.closest('.bubble-wrap');
+    if (wrapEl) {
+      const copyBtn = wrapEl.querySelector('.copy-btn');
+      if (copyBtn) {
+        copyBtn.onclick = () => copyText(copyBtn, fullText);
+      }
+    }
+  }
+}
+
+/* ================================================================
+   EXPORT REPORT
+================================================================ */
+function exportReport(btn, summaryHtml) {
+  // Decode HTML entities for plain-text export
+  const tmp = document.createElement('textarea');
+  tmp.innerHTML = summaryHtml;
+  const summaryText = tmp.value;
+
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+  const filename = `DefectBot-Report-${timestamp}.txt`;
+
+  const content = [
+    '=' .repeat(60),
+    'DEFECTBOT INSPECTION REPORT',
+    `Generated: ${new Date().toLocaleString()}`,
+    '=' .repeat(60),
+    '',
+    summaryText,
+    '',
+    '=' .repeat(60),
+    'Generated by DefectBot — On-Device AI Defect Inspection',
+    '=' .repeat(60),
+  ].join('\n');
+
+  const blob = new Blob([content], { type: 'text/plain; charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+
+  // Feedback
+  const orig = btn.textContent;
+  btn.textContent = '✅ Downloaded!';
+  setTimeout(() => { btn.textContent = orig; }, 2000);
+}
+
+/* ================================================================
+   COPY BUTTON
+================================================================ */
+function copyBubble(btn, text) {
+  copyText(btn, text);
+}
+
+function copyText(btn, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const orig = btn.textContent;
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = orig;
+      btn.classList.remove('copied');
+    }, 1800);
+  }).catch(() => {
+    // Fallback for older browsers
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+}
+
+/* ================================================================
+   QUICK CHIPS
+================================================================ */
+function fillChip(text) {
+  const input = document.getElementById('msg-input');
+  input.value = text;
+  input.focus();
+  autoResize(input);
+}
+
+/* ================================================================
+   IMAGE UPLOAD
+================================================================ */
+document.getElementById('img-input').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    pendingImage = ev.target.result;
+
+    // Show thumbnail on the camera button
+    const imgBtn = document.getElementById('img-btn');
+    imgBtn.textContent = '🖼️';
+    imgBtn.title = 'Image attached — click to change';
+    imgBtn.style.borderColor = 'var(--accent)';
+    imgBtn.style.color = 'var(--accent)';
+
+    // Focus input for description
+    document.getElementById('msg-input').focus();
+    document.getElementById('msg-input').placeholder = 'Describe what you see in the image…';
+  };
+  reader.readAsDataURL(file);
+});
+
+// Reset image button styling after send
+function resetImageBtn() {
+  const imgBtn = document.getElementById('img-btn');
+  imgBtn.textContent = '📷';
+  imgBtn.title = 'Attach photo';
+  imgBtn.style.borderColor = '';
+  imgBtn.style.color = '';
+  document.getElementById('msg-input').placeholder = 'Describe the defect… (Enter to send, Shift+Enter for newline)';
+}
+
+/* ================================================================
+   VOICE RECORDING — Hold to record
+================================================================ */
+const micBtn = document.getElementById('mic-btn');
+let isRecording = false;
+
+// Mouse/Touch hold events
+micBtn.addEventListener('mousedown', startRecording);
+micBtn.addEventListener('touchstart', (e) => { e.preventDefault(); startRecording(); }, { passive: false });
+micBtn.addEventListener('mouseup', stopRecording);
+micBtn.addEventListener('mouseleave', stopRecording);
+micBtn.addEventListener('touchend', (e) => { e.preventDefault(); stopRecording(); });
+
+async function startRecording() {
+  if (isRecording) return;
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioChunks = [];
+
+    // Try preferred formats (Safari/Chrome compatible)
+    const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+      ? 'audio/webm;codecs=opus'
+      : MediaRecorder.isTypeSupported('audio/webm')
+      ? 'audio/webm'
+      : 'audio/mp4';
+
+    mediaRecorder = new MediaRecorder(stream, { mimeType });
+    mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunks.push(e.data); };
+    mediaRecorder.start(100); // collect data every 100ms
+
+    isRecording = true;
+    micBtn.classList.add('recording');
+    micBtn.textContent = '⏹️';
+
+    document.getElementById('voice-status').classList.add('visible');
+
+  } catch (err) {
+    console.error('[DefectBot] Mic error:', err);
+    alert('Microphone access denied. Please allow microphone access in your browser settings.');
+  }
+}
+
+async function stopRecording() {
+  if (!isRecording || !mediaRecorder) return;
+  isRecording = false;
+
+  document.getElementById('voice-status').classList.remove('visible');
+  micBtn.classList.remove('recording');
+  micBtn.textContent = '🎙️';
+
+  return new Promise((resolve) => {
+    mediaRecorder.onstop = async () => {
+      const mimeType = mediaRecorder.mimeType;
+      const audioBlob = new Blob(audioChunks, { type: mimeType });
+
+      // Stop all tracks
+      mediaRecorder.stream.getTracks().forEach(t => t.stop());
+
+      if (audioBlob.size < 1000) {
+        console.log('[DefectBot] Audio too short, skipping transcription');
+        resolve();
+        return;
+      }
+
+      await transcribeAudio(audioBlob, mimeType);
+      resolve();
+    };
+    mediaRecorder.stop();
+  });
+}
+
+async function transcribeAudio(audioBlob, mimeType) {
+  micBtn.textContent = '⏳';
+  micBtn.disabled = true;
+
+  try {
+    const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
+    const formData = new FormData();
+    formData.append('file', audioBlob, `recording.${ext}`);
+    formData.append('model', 'whisper-1');
+
+    const resp = await fetch(WHISPER_URL, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!resp.ok) throw new Error(`WhisperKit HTTP ${resp.status}`);
+
+    const data = await resp.json();
+    const transcript = data.text?.trim();
+
+    if (transcript) {
+      const input = document.getElementById('msg-input');
+      input.value = transcript;
+      autoResize(input);
+      input.focus();
+
+      // Auto-send after 1.5 seconds (user can cancel by editing)
+      clearTimeout(autoSendTimer);
+      autoSendTimer = setTimeout(() => {
+        if (input.value === transcript) {
+          sendMessage();
+        }
+      }, 1500);
+    } else {
+      document.getElementById('msg-input').placeholder = 'Transcription empty — please type your message.';
+    }
+
+  } catch (err) {
+    console.error('[DefectBot] Transcription error:', err);
+    document.getElementById('msg-input').placeholder = 'Transcription unavailable — type your message manually.';
+  } finally {
+    micBtn.textContent = '🎙️';
+    micBtn.disabled = false;
+  }
+}
+
+/* ================================================================
+   TEXTAREA AUTO-RESIZE + KEYBOARD SHORTCUTS
+================================================================ */
+const msgInput = document.getElementById('msg-input');
+
+msgInput.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    clearTimeout(autoSendTimer); // cancel any pending auto-send
+    sendMessage();
+  }
+});
+
+msgInput.addEventListener('input', function() {
+  autoResize(this);
+  // Cancel auto-send if user edits the transcription
+  clearTimeout(autoSendTimer);
+});
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+/* ================================================================
+   TYPING INDICATOR + SCROLL
+================================================================ */
+function showTyping(visible) {
+  document.getElementById('typing').classList.toggle('visible', visible);
+  if (visible) scrollToBottom();
+}
+
+function scrollToBottom() {
+  const chat = document.getElementById('chat');
+  requestAnimationFrame(() => {
+    chat.scrollTop = chat.scrollHeight;
+  });
+}
+
+/* ================================================================
+   UTILITY
+================================================================ */
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function escapeForAttr(str) {
+  return escapeHtml(str).replace(/\n/g, '&#10;');
+}
+
+function delay(ms) {
+  return new Promise(res => setTimeout(res, ms));
+}
+
+/* ================================================================
+   INITIALISE
+================================================================ */
+document.addEventListener('DOMContentLoaded', () => {
+  // Check Ollama connection on load
+  checkOllamaConnection();
+
+  // Focus input
+  document.getElementById('msg-input').focus();
+
+  // Re-check every 30 seconds in case Ollama starts up
+  setInterval(async () => {
+    if (demoMode) await checkOllamaConnection();
+  }, 30000);
+});
+</script>
+
+</body>
+</html>

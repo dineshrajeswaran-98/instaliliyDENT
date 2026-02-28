@@ -838,22 +838,16 @@ async function sendMessage() {
   const welcome = document.getElementById('welcome');
   if (welcome) welcome.remove();
 
-  // Build user message content
-  let userContent = [];
-  if (pendingImage) {
-    // Include image as base64 for multimodal context (shown in UI; Ollama vision optional)
-    userContent.push({ type: 'image_url', image_url: { url: pendingImage } });
-  }
-  if (text) {
-    userContent.push({ type: 'text', text });
-  }
-
-  // For the conversation history (Ollama), use plain text.
-  // When only an image is attached, send a domain-specific prompt so the model
-  // responds as a defect inspector rather than giving a generic answer.
+  // For the conversation history (Ollama), include image via the `images` field
+  // (Ollama vision API: raw base64, not a data URL) plus a text prompt.
   const userMsgText = text
-    || 'I have uploaded a photo of a defect at this site. Based on what you can see, please ask me 2–3 targeted follow-up questions to help identify the defect type (e.g. water ingress, structural crack, spalling, belt tear, oil leak, etc.), its exact location, and how severe it appears. Do not mention panels.';
-  messages.push({ role: 'user', content: userMsgText });
+    || 'Please examine this image carefully and describe every visible defect, damage, or anomaly you can see. Then ask me 2–3 targeted follow-up questions about the location, severity, and how long the issue has been present.';
+  const userMsg = { role: 'user', content: userMsgText };
+  if (pendingImage) {
+    // Strip the "data:image/...;base64," prefix — Ollama wants raw base64
+    userMsg.images = [pendingImage.split(',')[1]];
+  }
+  messages.push(userMsg);
 
   // Render user bubble — show friendly label, not the full injected prompt
   const displayText = text || (pendingImage ? 'Photo uploaded — awaiting diagnosis' : userMsgText);

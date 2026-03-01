@@ -219,11 +219,11 @@ Health risk: Black mould releases spores that cause respiratory issues. This is 
 Contributing factors: Exhaust fan connected to a common duct riser that is blocked, insufficient fan capacity, or bathroom not being ventilated during/after use.
 
 MANAGER SUMMARY
-Severity: HIGH
-Issue: Black mould in multiple bathrooms on same floor — health hazard indicating systemic ventilation failure.
+Severity: MEDIUM
+Issue: Black mould in multiple bathrooms on same floor — health concern indicating systemic ventilation failure requiring planned remediation.
 Root Cause: Inadequate exhaust ventilation causing condensation and mould growth on ceiling and wall surfaces.
-Immediate Action: Increase ventilation — open windows where possible; inspect and test all exhaust fans; check common duct riser for blockage. If occupants have respiratory conditions, consider temporary relocation.
-Recommended Timeline: Exhaust fan inspection within 24 hours; mould remediation by licensed hygienist within 1 week; ventilation upgrade within 4 weeks.
+Immediate Action: Open windows where possible; inspect and test all exhaust fans; check common duct riser for blockage. Occupants with respiratory conditions should avoid affected bathrooms until remediation is complete.
+Recommended Timeline: Exhaust fan inspection within 3 days; mould remediation by licensed hygienist within 2 weeks; ventilation upgrade within 4 weeks.
 Estimated Cost Impact: $2,000–$5,000 mould remediation; $3,000–$8,000 ventilation upgrade depending on extent."""
     },
     {
@@ -342,11 +342,11 @@ Alternative cause: Cracked sewer pipe beneath the slab, allowing gases to permea
 Sewer gas contains hydrogen sulphide (H₂S) — toxic and flammable at high concentrations.
 
 MANAGER SUMMARY
-Severity: HIGH
-Issue: Sewer gas odour in basement carpark — potential health and fire hazard from hydrogen sulphide gas.
-Root Cause: Likely evaporated floor drain P-traps allowing sewer gas backflow; secondary possibility of cracked underground sewer pipe.
-Immediate Action: Pour water into all floor drains immediately (prime the traps); increase ventilation; if smell persists, commission plumber for CCTV sewer inspection.
-Recommended Timeline: Trap priming today; if odour persists after 24 hours, plumber inspection within 48 hours.
+Severity: MEDIUM
+Issue: Sewer gas odour in basement carpark — most likely evaporated floor drain traps; requires investigation to rule out cracked sewer pipe.
+Root Cause: Evaporated floor drain P-trap water seals allowing sewer gas to escape; cracked underground sewer pipe is a secondary possibility.
+Immediate Action: Pour water into all floor drains to prime the traps; increase mechanical ventilation. If odour persists after 24 hours, engage plumber for CCTV sewer inspection.
+Recommended Timeline: Trap priming today; re-assess within 24 hours; if unresolved, plumber inspection within 1 week.
 Estimated Cost Impact: $0 if trap priming resolves; $2,000–$8,000 if sewer repair required."""
     },
     {
@@ -380,11 +380,11 @@ Root cause: Failed expansion joint sealant — either exceeded its design moveme
 Risk: Open expansion joint on upper floors is a direct rainwater entry path that can cause extensive internal water damage to multiple floors below.
 
 MANAGER SUMMARY
-Severity: HIGH
-Issue: Open expansion joint on Level 5 — direct water ingress pathway across multiple floors.
+Severity: MEDIUM
+Issue: Open expansion joint on Level 5 — potential water ingress pathway requiring planned reseal.
 Root Cause: Failed building expansion joint sealant due to age, movement exceedance, or adhesion failure.
-Immediate Action: Temporary weatherproofing (tape or temporary flexible sealant) immediately if rain is forecast; engage building envelope specialist for assessment within 1 week.
-Recommended Timeline: Temporary seal within 24 hours if rain risk; permanent joint reseal within 4 weeks using appropriate movement-rated sealant and bond-breaker tape.
+Immediate Action: Apply temporary weatherproofing tape if rain is forecast within 48 hours; engage building envelope specialist for assessment and reseal scope.
+Recommended Timeline: Temporary seal within 1 week if rain risk; permanent joint reseal within 4 weeks using appropriate movement-rated sealant and bond-breaker tape.
 Estimated Cost Impact: $1,500–$5,000 per joint for professional reseal."""
     },
     {
@@ -399,11 +399,11 @@ Root cause: Hydrostatic uplift blister — water under positive pressure between
 Risk: If the blister ruptures, water will flood into the basement. Additional blistering may occur across the floor.
 
 MANAGER SUMMARY
-Severity: HIGH
-Issue: Waterproofing membrane blister on basement floor — hydrostatic uplift indicating active groundwater pressure beneath membrane.
-Root Cause: Groundwater hydrostatic pressure exceeding membrane bond strength, lifting and delaminating the membrane.
-Immediate Action: Do not puncture the blister; monitor size daily; engage waterproofing engineer to assess groundwater levels and recommend drainage relief or membrane replacement strategy.
-Recommended Timeline: Engineering assessment within 1 week; dewatering strategy or membrane replacement within 4–8 weeks.
+Severity: MEDIUM
+Issue: Waterproofing membrane blister on basement floor — hydrostatic uplift indicating groundwater pressure; requires engineering assessment to determine repair strategy.
+Root Cause: Groundwater hydrostatic pressure beneath membrane exceeding bond strength, causing localised delamination.
+Immediate Action: Do not puncture the blister; mark its perimeter and monitor size every 2–3 days; engage waterproofing engineer to assess groundwater levels.
+Recommended Timeline: Engineering assessment within 2 weeks; dewatering strategy or membrane replacement within 4–8 weeks as directed by engineer.
 Estimated Cost Impact: $5,000–$30,000+ depending on basement area and groundwater management approach."""
     },
     {
@@ -699,11 +699,11 @@ Root cause: Crown cracking with white mineral deposits (calcite or lime leaching
 The mineral deposits confirm these cracks have been actively seeping for an extended period, potentially causing rebar corrosion within the lining.
 
 MANAGER SUMMARY
-Severity: HIGH
-Issue: Multiple mineral-stained crown cracks in 15-year-old tunnel — long-term water seepage indicates degraded lining integrity and potential rebar corrosion.
-Root Cause: Long-term water infiltration through aging tunnel lining cracks dissolving concrete minerals; rebar corrosion risk within the lining.
-Immediate Action: Install monitoring points; engage geotechnical/structural engineer for comprehensive tunnel lining inspection; conduct rebar cover depth and corrosion potential measurements.
-Recommended Timeline: Engineering inspection within 1 week; full condition survey within 1 month; rehabilitation planning within 3 months.
+Severity: MEDIUM
+Issue: Multiple mineral-stained crown cracks in 15-year-old tunnel — long-term seepage indicating aging lining; plan condition survey and rehabilitation.
+Root Cause: Sustained water infiltration through aging tunnel lining dissolving concrete minerals; potential rebar corrosion within lining over time.
+Immediate Action: Install crack monitoring pins at representative locations; record crack widths and water flow; report to geotechnical engineer for planned inspection.
+Recommended Timeline: Engineering inspection within 2 weeks; full condition survey within 1 month; rehabilitation design within 3 months.
 Estimated Cost Impact: $10,000–$50,000 condition survey; $50,000–$500,000+ for tunnel lining rehabilitation depending on extent."""
     },
 
@@ -916,11 +916,11 @@ Root cause: Dust suppression nozzle clogging from scale buildup (calcium carbona
 Health risk: Silica dust exposure causes silicosis — an irreversible and fatal lung disease. This is a mandatory reportable issue in most jurisdictions.
 
 MANAGER SUMMARY
-Severity: CRITICAL
-Issue: Dust suppression system failure in crushing bay — mandatory exposure controls not functioning; immediate silica/coal dust health risk.
-Root Cause: Nozzle clogging from scale or fines blocking dust suppression water spray.
-Immediate Action: Require all personnel in the crushing bay to wear appropriate RPE (P2/P3 respirator); reduce crusher throughput or stop if dust levels are excessive; clear nozzle blockages immediately (flush or replace nozzles).
-Recommended Timeline: Nozzle repair within 4 hours; full system flush and nozzle inspection within 24 hours; install filtration/softener if scale is the cause.
+Severity: HIGH
+Issue: Dust suppression system failure in crushing bay — engineered dust control not functioning; silica/coal dust exposure risk to personnel.
+Root Cause: Nozzle clogging from mineral scale or fine particle buildup blocking dust suppression water spray.
+Immediate Action: Require all personnel in crushing bay to wear P2/P3 respirators immediately as interim control; reduce crusher throughput if airborne dust is visibly excessive; clear nozzle blockages (flush or replace nozzles) within 4 hours.
+Recommended Timeline: Nozzle repair within 4 hours; full system flush and nozzle inspection within 24 hours; install water filtration or softener if scale is the recurring cause.
 Estimated Cost Impact: $200–$1,000 nozzle replacement; $2,000–$8,000 water treatment upgrade; potential regulatory fine if exposure records are not maintained."""
     },
     {
@@ -1218,9 +1218,231 @@ Estimated Cost Impact: $2,000–$8,000 per stair flight for full replacement; $5
 ]
 
 # ---------------------------------------------------------------------------
+# IMAGE SIMULATION SAMPLES
+# These teach the model to ask image-anchored follow-up questions.
+# The instruction mimics what the vision encoder observes in a photo.
+# ---------------------------------------------------------------------------
+IMAGE_SAMPLES = [
+
+    # ── Building: diagonal crack from window corner ─────────────────────────
+    {
+        "instruction": "[IMAGE RECEIVED: Photo shows a brick masonry wall with a diagonal crack originating from the top-left corner of a window frame, running diagonally downward at roughly 45 degrees toward the floor. The crack follows the mortar bed joints in a staircase pattern. Estimated crack width at the widest point appears to be approximately 3–4mm. No visible moisture or staining on the crack faces. The surrounding mortar appears weathered and friable.]",
+        "response": """FOLLOW-UP QUESTIONS:
+1. I can see the crack follows the mortar bed joints in a staircase pattern — is the crack wider at the top near the window corner or at the bottom, and does it taper to a hairline lower down?
+2. The mortar appears weathered — how old is this building, and has any ground disturbance (excavation, tree removal, or construction) occurred within 10 metres recently?
+3. Looking at the window frame itself — is the frame still square, or can you see the window is racked or the gap between frame and wall is uneven on one side?
+
+DIAGNOSIS:
+Root cause: The staircase diagonal crack following mortar bed joints from a window corner is the classic signature of differential foundation settlement — the weakest stress path in the masonry is along the mortar joints, and window corners are stress concentration points. A 3–4mm crack width indicates this is a structural concern, not cosmetic cracking.
+Contributing factors: Friable weathered mortar reduces the masonry's tensile capacity, making it easier for settlement forces to propagate the crack. Possible clay soil shrinkage cycles, tree root activity, or inadequate footing depth.
+Critical distinction: If the crack faces are displaced (one side higher than the other), active movement is in progress. If the crack faces are flush, movement may be historic.
+
+MANAGER SUMMARY
+Severity: HIGH
+Issue: 3–4mm diagonal staircase crack in brick masonry from window corner — indicative of differential foundation settlement.
+Root Cause: Foundation subsidence causing masonry tension crack at window corner stress concentration — soil movement or inadequate footing bearing probable.
+Immediate Action: Mark crack tips with dateable tell-tales; photograph with scale reference; engage structural engineer for assessment within 48 hours.
+Recommended Timeline: Structural assessment within 48 hours; crack monitoring for 4–6 weeks to determine if movement is active; repair per engineer's recommendation.
+Estimated Cost Impact: $2,000–$5,000 investigation and monitoring; $15,000–$80,000+ for underpinning if foundation movement is confirmed."""
+    },
+
+    # ── Building: ceiling water stain ──────────────────────────────────────
+    {
+        "instruction": "[IMAGE RECEIVED: Photo shows a plasterboard ceiling with a brown-yellow circular water stain approximately 80cm in diameter. The stain has a darker brown outer ring with a lighter centre, suggesting the leak is intermittent rather than active. The plaster surface is bubbled and sagging slightly at the centre of the stain. There is no dripping visible. The stain is positioned in a corridor, with no visible pipe penetrations in the ceiling — however, this appears to be below a bathroom area based on visible tile grout line shadows through a gap in the ceiling.]",
+        "response": """FOLLOW-UP QUESTIONS:
+1. I can see the stain has a darker outer ring with a lighter centre — does the stain grow larger or does the sagging increase after wet weather, or does it appear linked to morning bathroom usage times on the floor above?
+2. The plaster is bubbled and sagging — when you press gently on the sagging area, does water or damp material come out, and is the plaster still structurally attached or risk of falling?
+3. Given the tile grout shadow visible above — has any grouting, tiling work, or plumbing been done in the bathroom above in the past 6–12 months?
+
+DIAGNOSIS:
+Root cause: Intermittent water ingress from the bathroom above — the brown-yellow staining with a defined outer ring is characteristic of dissolved minerals (limescale, plaster, or paint) deposited by water that has dried, indicating a recurring but not constant leak. The most probable sources are: failed floor drain seal or cracked floor tile grout allowing shower/bath water to penetrate the slab, or a slow waste pipe joint leak above.
+Risk: The sagging plaster is load-bearing its own wet weight — it may detach and fall. The damp plasterboard is also a mould growth substrate.
+
+MANAGER SUMMARY
+Severity: HIGH
+Issue: 80cm brown water stain with sagging plasterboard in ceiling corridor — intermittent leak from bathroom above with imminent plaster fall risk.
+Root Cause: Probable bathroom floor waterproofing or waste pipe failure above, causing recurring moisture penetration through the slab.
+Immediate Action: Cordon off the area below the sagging plaster; engage licensed plumber to inspect bathroom above within 24 hours; do not attempt to poke or remove sagging plaster without eye protection.
+Recommended Timeline: Plumbing inspection within 24 hours; ceiling plaster removal and replacement within 1 week after leak source repair; mould check and treatment if plasterboard has been wet >48 hours.
+Estimated Cost Impact: $1,500–$4,000 plumbing repair; $1,000–$3,500 ceiling remediation."""
+    },
+
+    # ── Building: concrete spalling ─────────────────────────────────────────
+    {
+        "instruction": "[IMAGE RECEIVED: Photo shows a reinforced concrete column at ground level with active spalling — the concrete cover has delaminated in an irregular patch approximately 40cm x 25cm. Several pieces of concrete have already fallen, revealing rusty brown corroded rebar beneath. The exposed rebar has visible rust layering and some pitting. The surrounding concrete shows map cracking (crazing pattern) extending about 30cm beyond the spall zone. Staining around the spall is rust-brown, suggesting the corrosion has been active for some time.]",
+        "response": """FOLLOW-UP QUESTIONS:
+1. I can see the exposed rebar has rust layering — can you check if the rebar still feels solid when you try to flex it by hand, or does it feel spongy/crumbly at any point?
+2. The map cracking extends 30cm beyond the visible spall — are there any other columns in this area showing similar map cracking or rust staining, even without spalling yet?
+3. Is this column in a car park, ground floor, or basement level, and is the area exposed to vehicle exhaust or regular water runoff that contacts the base of the column?
+
+DIAGNOSIS:
+Root cause: Chloride-induced or carbonation-induced rebar corrosion causing expansive spalling. When rebar corrodes, iron oxide (rust) occupies 3–6× the volume of the original steel, generating internal pressure that delaminated the concrete cover. The map cracking beyond the spall zone indicates the corrosion-induced pressure is active throughout the surrounding concrete.
+Structural concern: A 40×25cm spall with visible rebar pitting represents a reduction in the rebar cross-section — the column's load capacity is compromised. This must be assessed by a structural engineer before load ratings can be confirmed.
+
+MANAGER SUMMARY
+Severity: HIGH
+Issue: Active rebar corrosion with 40×25cm concrete spall on structural column — cross-sectional steel loss and ongoing expansive pressure compromising column capacity.
+Root Cause: Rebar depassivation from chloride ingress or concrete carbonation causing expansive corrosion and concrete cover delamination.
+Immediate Action: Erect protective screening below the spall to catch further falling concrete; restrict loading in the column's tributary area; engage structural engineer for column capacity assessment within 48 hours.
+Recommended Timeline: Structural assessment within 48 hours; carbonation/chloride depth testing within 1 week; full concrete repair (breakout, rebar treatment, patch) within 4–8 weeks per engineer's specification.
+Estimated Cost Impact: $3,000–$8,000 per column repair; $500–$1,500 carbonation/chloride investigation; larger scope if multiple columns affected."""
+    },
+
+    # ── Building: efflorescence and rising damp ─────────────────────────────
+    {
+        "instruction": "[IMAGE RECEIVED: Photo shows the base of an internal brick wall, approximately 0–60cm from the floor, covered in white crystalline deposits (efflorescence) with a fluffy, salt-like texture. The brick surface below the efflorescence line appears darker and damp. Paint above the efflorescence line is bubbling and peeling. There is a faint white tide mark at approximately 55cm above floor level. The floor adjacent to the wall shows salt crystallisation on the concrete as well.]",
+        "response": """FOLLOW-UP QUESTIONS:
+1. I can see a tide mark at ~55cm and damp brickwork below it — is this an external wall or an internal partition wall, and is there any garden bed, paving, or soil immediately outside on the other side?
+2. The efflorescence has a fluffy texture — has it appeared gradually over months, or did it appear quickly after a wet season or flooding event?
+3. Is there a visible damp-proof course (DPC) — a thin black or grey horizontal line in the mortar at about 1–2 courses above floor level? If so, is there any bridging material (render, pavers, garden soil) covering it on the exterior?
+
+DIAGNOSIS:
+Root cause: Classic rising damp — groundwater is being drawn upward through the masonry by capillary action, evaporating at the surface and depositing dissolved salts as white efflorescence. The tide mark at 55cm represents the equilibrium height where evaporation rate equals the capillary rise rate. The damp-proof course (DPC) has either failed, is absent, or is being bridged by external material (soil, render, or paving raised above DPC level).
+Secondary effect: The salts deposited by evaporation are hygroscopic — they absorb atmospheric moisture, maintaining the wet appearance even in dry weather, and they expand on wetting, causing paint bubbling and masonry face spalling over time.
+
+MANAGER SUMMARY
+Severity: MEDIUM
+Issue: Active rising damp to 55cm on internal wall — salt crystallisation damage to masonry, paint, and floor finish; long-term structural mortar degradation risk.
+Root Cause: Failed, absent, or bridged damp-proof course allowing groundwater capillary rise through masonry.
+Immediate Action: Remove any external material (soil, render, paving) that is above the DPC level; allow wall to dry; do not apply new paint until wall is dry and source is addressed.
+Recommended Timeline: External DPC bridge removal within 1 week; specialist rising damp assessment within 2 weeks; DPC installation or remediation within 1–3 months.
+Estimated Cost Impact: $3,000–$8,000 chemical DPC injection per wall; $1,000–$3,000 salt-damaged plaster and paint remediation."""
+    },
+
+    # ── Mining: conveyor belt carcass exposed ───────────────────────────────
+    {
+        "instruction": "[IMAGE RECEIVED: Photo shows the top carrying surface of a conveyor belt. A longitudinal tear runs along the centreline of the belt, approximately 1.2 metres long. The rubber cover is split open and the inner fabric carcass layers (appears to be 3-ply) are exposed and show signs of fraying at the tear edges. The rubber cover on either side of the tear is intact but shows heavy abrasion scoring. The belt appears to be stationary — no material is visible on the belt surface.]",
+        "response": """FOLLOW-UP QUESTIONS:
+1. I can see the tear runs along the centreline and the carcass is 3-ply — is the tear through the full depth of all 3 plies, or has it only split the top 1–2 plies with the bottom ply still intact?
+2. The abrasion scoring on either side of the tear suggests something was dragging across the belt — was there a recent jam at the loading chute, a foreign object (rock, bolt, or wood) that may have punctured the belt from the top?
+3. When was this belt last inspected, and how many hours/tonnes has it run since the last replacement or major repair?
+
+DIAGNOSIS:
+Root cause: Longitudinal centreline tear is caused by a sharp foreign object (tramp metal, protruding bolt, rock splinter) penetrating the belt at the loading point and then being dragged longitudinally by the belt movement, cutting through the rubber cover and into the carcass. The centreline location is consistent with material being dropped from directly above (chute centre stream). The fraying at the tear edges indicates the tear has been running for some time — frayed carcass strands indicate repeated flexing of the exposed ply edges.
+Risk: A 3-ply belt with exposed fraying carcass has significantly reduced tensile strength at the tear location. Under full load tension, the tear can propagate rapidly leading to full belt rupture.
+
+MANAGER SUMMARY
+Severity: CRITICAL
+Issue: 1.2-metre longitudinal centreline tear with exposed fraying 3-ply carcass — risk of full belt rupture under tension.
+Root Cause: Tramp metal or sharp foreign object puncture at load chute creating longitudinal cut through cover and into carcass fabric.
+Immediate Action: Do not restart belt. LOTO. Assess full tear depth — if all 3 plies are cut, belt replacement or emergency vulcanised splice repair is required before any restart. Install tramp metal detector and magnet on the feed conveyor.
+Recommended Timeline: Carcass depth assessment and repair plan within 4 hours; emergency vulcanised repair or belt replacement within 24–48 hours; tramp metal controls within 1 week.
+Estimated Cost Impact: $3,000–$8,000 vulcanised repair; $15,000–$80,000 full belt replacement; $5,000–$15,000 tramp metal protection installation."""
+    },
+
+    # ── Mining: hydraulic hose spray ────────────────────────────────────────
+    {
+        "instruction": "[IMAGE RECEIVED: Photo shows an excavator boom with a hydraulic hose that has a visible hole approximately mid-length, spraying a fine mist of amber-coloured hydraulic oil. The spray pattern is approximately 30cm wide. The hose outer sheath shows abrasion scoring where it has been rubbing against a sharp edge of the boom structure. There are oil stains on the boom steel below the hose, and a wet oil patch is visible on the ground below the machine. A turbocharger exhaust is visible in the background within approximately 50cm of the spray.]",
+        "response": """FOLLOW-UP QUESTIONS:
+1. I can see the hose has been rubbing against a sharp boom edge — is this hose routed through a protection sleeve or clamp, or is it in direct metal-to-metal contact with the boom structure?
+2. The turbocharger exhaust is approximately 50cm from the spray — is the machine currently running, and has any smoke or ignition been observed near the spray point?
+3. What is the system operating pressure for this hose — is it a main lift/crowd circuit (typically >250 bar) or a pilot/return line?
+
+DIAGNOSIS:
+Root cause: Hydraulic hose abrasion failure — the hose outer sheath has been worn through by repeated contact with the sharp boom steel edge, eventually breaching the reinforcement wire and inner liner, causing a pinhole high-pressure spray. This is a preventable failure from inadequate hose routing and clamping.
+CRITICAL hazard: The turbocharger exhaust surface temperature is typically 400–700°C. High-pressure hydraulic oil mist contacting this surface will ignite immediately, causing a hydraulic oil fire. This is an imminent fire risk that requires immediate machine shutdown.
+Injection injury: A hydraulic oil jet at >100 bar can penetrate skin without pain — any hand exposure to the mist for leak detection is an injection injury hazard.
+
+MANAGER SUMMARY
+Severity: CRITICAL
+Issue: Hydraulic hose pinhole spray on excavator boom — fine oil mist within 50cm of turbocharger exhaust; imminent fire and injection injury risk.
+Root Cause: Abrasion failure from unprotected hose contact with sharp boom edge — hose routing and clamping deficiency.
+Immediate Action: SHUT DOWN the excavator engine immediately. Do not approach the mist with bare skin. Move the machine away from ignition sources if safe to do so from the cab. LOTO. Replace hose and install protection sleeve before restart.
+Recommended Timeline: Machine shutdown now; hose replacement within 4 hours; full boom hose routing audit within 24 hours; correct all unprotected hose contact points.
+Estimated Cost Impact: $300–$800 hose and sleeve replacement; $50,000–$500,000+ if hydraulic fire occurs."""
+    },
+
+    # ── Mining: seized idler roller ─────────────────────────────────────────
+    {
+        "instruction": "[IMAGE RECEIVED: Photo shows a return strand idler roller under a conveyor belt. The roller is not rotating — the belt is visibly sliding over it rather than rolling it. A distinct flat spot approximately 8cm long is visible on the roller surface where the rubber belt has worn the steel. The roller surface around the flat spot shows discolouration — a blue-brown heat tint on the steel. There is a faint smoke trail visible rising from the roller contact point with the belt.]",
+        "response": """FOLLOW-UP QUESTIONS:
+1. I can see smoke coming from the roller contact point — is the conveyor currently running, and if so, how long has it been running since this roller was first noticed seized?
+2. The blue-brown heat tint indicates the roller has reached significant temperatures — is this roller in an area where the belt carries combustible material (coal, biomass, sulphur), and is there a fire suppression system in this conveyor gallery?
+3. Can you see or smell burning rubber where the belt is sliding over the flat spot — is the belt underside showing a wear groove or heat damage at this contact point?
+
+DIAGNOSIS:
+Root cause: Idler roller bearing failure causing complete seizure — the bearing races have failed, preventing roller rotation. The flat spot (8cm) and blue-brown heat tint confirm the roller has been seized for an extended period under running belt. The smoke trail indicates friction heat is being generated between the stationary roller surface and the moving belt — this is a fire ignition source.
+Fire risk: A seized idler in contact with a running belt generates temperatures capable of igniting conveyor belt material and conveyor structure. This is a known cause of major conveyor fires, particularly in underground and coal handling applications.
+
+MANAGER SUMMARY
+Severity: CRITICAL
+Issue: Seized return idler with 8cm flat spot, heat tint, and active smoke — fire ignition risk from belt-on-roller friction.
+Root Cause: Idler bearing failure causing complete roller seizure; extended running has created high-friction heat at belt contact.
+Immediate Action: STOP the conveyor via emergency stop immediately. Do not restart. Check for smouldering material along the conveyor path — have fire extinguisher ready. LOTO; replace seized roller before any restart; inspect belt underside for heat damage.
+Recommended Timeline: Conveyor stop now; roller replacement within 4 hours; thermal scan of all return strand rollers in the section within 24 hours; belt underside inspection before restart.
+Estimated Cost Impact: $50–$300 roller replacement; $2,000–$10,000 belt repair if underside damaged; potentially millions if fire occurs."""
+    },
+
+    # ── Building: roof membrane ponding ────────────────────────────────────
+    {
+        "instruction": "[IMAGE RECEIVED: Photo taken from the edge of a flat commercial roof. A large pool of standing water is visible, approximately 4 metres in diameter and estimated 15–20cm deep based on the submerged drain cover visible in the centre of the pond. The water surface appears stagnant with algae growth on the surface. The roof membrane around the pond shows cracking and crazing in the exposed areas. One corner of the parapet wall has a visible crack running vertically, and the roof-to-parapet junction shows the flashing has lifted off the wall.]",
+        "response": """FOLLOW-UP QUESTIONS:
+1. I can see the drain cover is submerged at the centre of the pond — when was the roof drain last cleaned, and does this pond appear after every significant rain event, or has this pond been permanent for an extended period?
+2. The flashing has lifted at the parapet junction — is the lifted flashing section allowing water to run behind the parapet wall, and is there any internal water staining visible below this parapet on the interior wall?
+3. The parapet crack is visible at the corner — does the crack appear to go through the full parapet thickness, and is there any movement or displacement between the two parapet faces at the crack?
+
+DIAGNOSIS:
+Root cause: Blocked roof drain causing chronic ponding — the submerged drain confirms the primary outlet is blocked. The algae growth indicates this is not a new event; the pond has persisted long enough for biological colonisation. Chronic ponding has caused: (1) hydrostatic degradation of the roof membrane (crazing and cracking), (2) lifted flashing at the parapet from water ingress and thermal cycling, and (3) the parapet corner crack from water saturation and freeze-thaw or salt crystallisation cycles.
+Structural risk: The 15–20cm deep pond represents ~150–200kg/m² of water load on the roof structure. If the roof was designed for 1.5kPa live load, this represents approximately 10–13% of that allowance — in addition to the dead loads, this may be approaching or exceeding capacity on an older structure.
+
+MANAGER SUMMARY
+Severity: HIGH
+Issue: Chronic roof ponding from blocked drain — roof membrane degradation, lifted flashing, parapet cracking, and potential structural overload risk.
+Root Cause: Blocked roof drain causing persistent standing water that has degraded the membrane, caused flashing failure, and is saturating the parapet masonry.
+Immediate Action: Clear the roof drain immediately (safety-harnessed worker); assess structural load capacity with a structural engineer if water volume exceeds 100mm depth; temporarily seal lifted flashing edges with roof tape.
+Recommended Timeline: Drain clearance within 24 hours; flashing resecurement within 1 week; structural assessment within 48 hours; full membrane and parapet remediation within 3 months.
+Estimated Cost Impact: $500–$1,500 drain clearance; $3,000–$10,000 flashing and parapet repair; $20,000–$60,000 if membrane replacement required."""
+    },
+
+]
+
+# ---------------------------------------------------------------------------
+# NO-DEFECT SAMPLES
+# These teach the model NOT to produce a MANAGER SUMMARY when no defect is found.
+# ---------------------------------------------------------------------------
+NO_DEFECT_SAMPLES = [
+    {
+        "instruction": "I just walked the external brick wall on Level 2 — no cracks, no staining, mortar looks solid, nothing unusual.",
+        "response": """The external brick wall on Level 2 appears to be in good condition. No cracking, mortar deterioration, efflorescence, moisture staining, or spalling was detected during this inspection.
+
+No action required at this time. Continue with the regular scheduled maintenance inspection cycle. If you notice any changes — even hairline cracking or new staining — report them promptly so we can catch any issues early."""
+    },
+    {
+        "instruction": "Checked the conveyor belt on Line 3 during the shift — belt surface looks fine, no tears, no edge fraying, idlers all spinning freely.",
+        "response": """The conveyor belt on Line 3 appears to be in normal operating condition. No belt tears, surface wear, edge fraying, or idler faults were observed during this walk-down.
+
+No action required at this time. Continue with the regular inspection schedule. If you hear any unusual noise from the idlers (grinding, squealing) or notice any belt tracking changes in the next shift, report it immediately."""
+    },
+    {
+        "instruction": "Roof inspection done — tiles all in place, gutters clear, no ponding, flashing looks intact around all penetrations.",
+        "response": """The roof appears to be in good condition following this inspection. Roof tiles are intact, gutters are clear of debris, no ponding water was observed, and flashings around all penetrations appear secure and intact.
+
+No defects detected. No action required at this time. Schedule the next inspection in line with your maintenance plan. Keep an eye on the flashing edges after the next heavy rain event."""
+    },
+    {
+        "instruction": "Looked at the hydraulic hoses on the excavator — no leaks, no abrasion marks, fittings all tight.",
+        "response": """The excavator hydraulic hoses appear to be in good condition. No leaks, oil seepage, abrasion damage, or loose fittings were detected during this inspection.
+
+No action required at this time. Log this inspection in the equipment maintenance record. Re-inspect at the next scheduled service interval, paying particular attention to hose sections that pass near the boom pivot points where abrasion risk is highest."""
+    },
+    {
+        "instruction": "[IMAGE RECEIVED: Photo shows a smooth, uniform concrete wall surface with no visible cracking, staining, spalling, or moisture. The surface finish is consistent and there are no signs of delamination or deterioration. No rebar is visible and no map cracking or efflorescence is present.]",
+        "response": """The concrete wall surface in this photo appears to be in good condition. No cracking, spalling, efflorescence, moisture staining, or rebar corrosion signs are visible. The surface finish is uniform with no delamination or deterioration detected.
+
+No defects identified in this image. No action required at this time. Continue with the regular inspection schedule. If future inspections reveal any hairline cracking or surface discolouration, report it early for assessment."""
+    },
+    {
+        "instruction": "Tunnel lining inspection on the access decline — shotcrete is solid, no cracking, no seepage at any joints, rock bolts all have plates seated correctly.",
+        "response": """The access decline tunnel lining appears to be in good condition. The shotcrete surface is intact with no cracking or delamination detected. No seepage was observed at any lining joints, and all visible rock bolt face plates are correctly seated with no ejection or movement noted.
+
+No defects detected. No action required at this time. Record this inspection in the geotechnical monitoring log and continue with the scheduled inspection frequency. Report any new cracking, seepage, or rock bolt plate movement immediately."""
+    },
+]
+
+# ---------------------------------------------------------------------------
 # Combine and write
 # ---------------------------------------------------------------------------
-ALL_SAMPLES = BUILDING_SAMPLES + MINING_SAMPLES + EXTRA_SAMPLES
+ALL_SAMPLES = BUILDING_SAMPLES + MINING_SAMPLES + EXTRA_SAMPLES + IMAGE_SAMPLES + NO_DEFECT_SAMPLES
 
 
 def main():
@@ -1233,9 +1455,11 @@ def main():
 
     print(f"✅ Dataset written to: {OUTPUT_PATH}")
     print(f"   Total samples: {len(ALL_SAMPLES)}")
-    print(f"   Building samples: {len(BUILDING_SAMPLES)}")
-    print(f"   Mining samples:   {len(MINING_SAMPLES)}")
-    print(f"   Extra samples:    {len(EXTRA_SAMPLES)}")
+    print(f"   Building samples:   {len(BUILDING_SAMPLES)}")
+    print(f"   Mining samples:     {len(MINING_SAMPLES)}")
+    print(f"   Extra samples:      {len(EXTRA_SAMPLES)}")
+    print(f"   Image samples:      {len(IMAGE_SAMPLES)}")
+    print(f"   No-defect samples:  {len(NO_DEFECT_SAMPLES)}")
 
 
 if __name__ == "__main__":

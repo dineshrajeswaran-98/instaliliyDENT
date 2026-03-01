@@ -323,6 +323,120 @@
 
     .export-btn:hover { background: #ffb84d15; }
 
+    /* ── Answer Chips (clickable question options) ──── */
+    .answer-chips-wrap {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .answer-chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .answer-q-label {
+      font-size: 11px;
+      color: var(--text-dim);
+      flex-basis: 100%;
+      margin-bottom: 2px;
+    }
+
+    .answer-chip {
+      padding: 5px 13px;
+      background: transparent;
+      border: 1px solid #ff6b3560;
+      border-radius: 20px;
+      color: #ff6b35cc;
+      font-size: 12.5px;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      white-space: nowrap;
+    }
+
+    .answer-chip:hover {
+      background: #ff6b3518;
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .answer-chip.selected {
+      background: #ff6b3525;
+      color: var(--accent);
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+
+    .answer-chip:disabled { cursor: default; }
+
+    /* Individual question block */
+    .q-block {
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
+
+    .q-block:first-child { border-top: none; margin-top: 6px; }
+
+    .q-text {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    /* ── Approve & Ticket ────────────────────────────── */
+    .approve-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 8px;
+      margin-left: 8px;
+      padding: 6px 14px;
+      background: transparent;
+      border: 1px solid #2dbd6e60;
+      border-radius: 20px;
+      color: #2dbd6e;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .approve-btn:hover { background: #2dbd6e15; }
+    .approve-btn:disabled { opacity: 0.6; cursor: default; }
+
+    .ticket-card {
+      margin-top: 12px;
+      padding: 12px 14px;
+      background: rgba(45, 189, 110, 0.06);
+      border: 1px solid rgba(45, 189, 110, 0.25);
+      border-radius: var(--radius-sm);
+    }
+
+    .ticket-header {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      color: #2dbd6e;
+      margin-bottom: 8px;
+    }
+
+    .ticket-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12.5px;
+      padding: 4px 0;
+      color: var(--text-dim);
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+
+    .ticket-row:last-child { border-bottom: none; }
+    .ticket-row strong { color: var(--text); }
+
     /* ── Message Text Formatting ─────────────────────── */
     .msg-text {
       white-space: pre-wrap;
@@ -718,33 +832,54 @@ const SYSTEM_PROMPT = `You are DefectBot, an expert AI assistant specialised in 
 
 Your role is to help field technicians diagnose defects accurately and generate professional reports.
 
+RESPONSE FORMAT:
+- Do NOT use section headers or labels such as "Defect Identification:", "Visual Evidence:", "Follow-Up Questions:", "Defect Type:", or any bold/bulleted labels. Write naturally and conversationally.
+- When an image is provided: briefly describe what you see in 1–2 sentences, then immediately ask your numbered questions.
+- For every numbered question, you MUST provide exactly 3–4 answer options on the very next line in this exact format (no deviations):
+  Options: [Option A | Option B | Option C | Option D]
+  Keep each option under 6 words. Cover the realistic range of answers.
+- Keep your initial response concise — 1–2 sentences of observation, then 2–3 numbered questions.
+- After the technician answers, give your diagnosis naturally without headers, then end with the MANAGER SUMMARY.
+
+NO DEFECT DETECTED:
+If the image or description shows no visible defect, abnormality, or maintenance concern, do NOT produce a MANAGER SUMMARY. Instead, briefly confirm what was inspected and state it appears in good condition. Example format:
+"The [surface/component] appears to be in normal condition — no [relevant defect types] detected. No action required at this time. Continue with regular scheduled maintenance. If you notice any changes, report them promptly."
+
 CONVERSATION FLOW:
-1. When a technician first reports a defect, ask 2–3 targeted, specific follow-up questions to gather key diagnostic details. Do NOT jump straight to a diagnosis without asking questions first.
-2. After the technician answers your questions, provide a clear DIAGNOSIS section with root cause and contributing factors.
-3. ALWAYS end your final response with a MANAGER SUMMARY section in exactly this format:
+1. When a technician reports a defect (text or image), start with 2–3 follow-up questions. NEVER skip straight to diagnosis.
+2. Your follow-up questions MUST be specific to what you can actually observe. Reference concrete visual details — e.g. crack width, staining colour, material type, pattern direction, proximity to joints or fittings.
+3. After the technician answers, provide your diagnosis naturally (no section labels), then the MANAGER SUMMARY.
+4. ALWAYS end your final response with a MANAGER SUMMARY in exactly this format (ONLY when a defect is confirmed):
 
 MANAGER SUMMARY
 Severity: [CRITICAL/HIGH/MEDIUM/LOW]
-Issue: [one sentence describing the problem]
-Root Cause: [concise technical explanation]
+Issue: [one sentence — name the specific defect and its exact location as observed]
+Root Cause: [concise technical explanation referencing observed evidence]
 Immediate Action: [what must be done now]
-Recommended Timeline: [specific timeframe for repairs]
+Recommended Timeline: [specific timeframe]
 Estimated Cost Impact: [dollar range]
 
-SEVERITY GUIDE:
-- CRITICAL: Immediate life-safety risk or imminent structural/equipment failure — stop work now
-- HIGH: Significant risk requiring urgent action within 24–48 hours
-- MEDIUM: Needs attention but can be planned within 1–4 weeks
-- LOW: Cosmetic or minor issue, schedule for next maintenance cycle
+IMAGE ANALYSIS RULES (when a photo is provided):
+- First, identify the defect category (e.g. spalling, efflorescence, belt tear, hydraulic leak, structural crack).
+- Note specific visual evidence: dimensions if estimable, colour, texture, pattern, affected material, surrounding context.
+- Ask follow-up questions that only make sense for THIS specific defect — e.g. for a crack, ask about step pattern vs hairline; for a stain, ask about colour and odour; for a belt, ask about tear direction and load side.
 
-Use specific technical terminology. Be concise but complete. Keep follow-up questions short and focused.`;
+SEVERITY GUIDE:
+- CRITICAL: Immediate life-safety risk or imminent structural/equipment failure — stop work now (e.g. falling concrete, loose flywheel, tunnel flooding, live electrical hazard)
+- HIGH: Significant risk requiring urgent action within 24–48 hours (e.g. active water near electrics, seized roller fire risk, hydraulic hose spray)
+- MEDIUM: Needs attention but can be planned within 1–4 weeks (e.g. mould from ventilation failure, minor seepage, surface cracking)
+- LOW: Cosmetic or minor issue, schedule for next maintenance cycle (e.g. efflorescence, paint peeling, surface staining)
+When in doubt between CRITICAL and HIGH, choose HIGH. When in doubt between HIGH and MEDIUM, choose MEDIUM. Most defects reported in the field are HIGH or MEDIUM — reserve CRITICAL only for genuine stop-work or evacuation-level events.
+
+Use specific technical terminology. Be concise but complete.`;
 
 /* ================================================================
    STATE
 ================================================================ */
 let messages = [{ role: 'system', content: SYSTEM_PROMPT }];
 let demoMode = false;
-let pendingImage = null;    // base64 data URL for attached image
+let pendingImage = null;      // base64 data URL for attached image
+let currentQuestionSet = null; // active one-at-a-time question sequence
 let mediaRecorder = null;
 let audioChunks = [];
 let autoSendTimer = null;
@@ -752,12 +887,14 @@ let isProcessing = false;
 
 /* Demo responses cycled in demo mode */
 const DEMO_RESPONSES = [
-  `Thanks for reporting this. Before I can give a full diagnosis, I have a few questions:
+  `Thanks for reporting this. To help me diagnose the root cause accurately, I need a few details:
 
-FOLLOW-UP QUESTIONS:
-1. How long has this issue been present — did it appear suddenly after a specific event (heavy rain, temperature change) or gradually over time?
-2. Can you describe the exact location more precisely — is it near any pipework, expansion joints, or building service penetrations?
-3. Is there any associated odour, discolouration, or visible moisture on adjacent surfaces?`,
+1. How long has this issue been present?
+Options: [Appeared suddenly | Gradual over weeks | Gradual over months | Not sure]
+2. Is the affected area near any pipework, expansion joints, or service penetrations?
+Options: [Yes, near pipework | Yes, near a joint | No nearby services | Can't tell]
+3. Is there any associated odour or visible moisture on adjacent surfaces?
+Options: [Yes, damp smell | Yes, visible moisture | No odour or moisture | Both smell and moisture]`,
 
   `Based on the information provided, here is my assessment:
 
@@ -828,6 +965,7 @@ function enableDemoMode() {
 ================================================================ */
 async function sendMessage() {
   if (isProcessing) return;
+  currentQuestionSet = null; // clear any pending question sequence
 
   const input = document.getElementById('msg-input');
   const text = input.value.trim();
@@ -841,7 +979,7 @@ async function sendMessage() {
   // For the conversation history (Ollama), include image via the `images` field
   // (Ollama vision API: raw base64, not a data URL) plus a text prompt.
   const userMsgText = text
-    || 'Please examine this image carefully and describe every visible defect, damage, or anomaly you can see. Then ask me 2–3 targeted follow-up questions about the location, severity, and how long the issue has been present.';
+    || 'I have uploaded a site photo for inspection. Look at the image and: (1) identify the defect type and describe the specific visual evidence you can see — colour, pattern, dimensions, material, location context; (2) ask me 2–3 follow-up questions that are directly tied to those specific observations to help confirm the root cause.';
   const userMsg = { role: 'user', content: userMsgText };
   if (pendingImage) {
     // Strip the "data:image/...;base64," prefix — Ollama wants raw base64
@@ -1039,9 +1177,14 @@ function renderFormattedText(bubbleEl, textEl, fullText) {
         <span class="severity-badge severity-${severity}">${severity}</span>
       </div>
       <div class="summary-body">${escapeHtml(summaryRaw)}</div>
-      <button class="export-btn" onclick="exportReport(this, ${JSON.stringify(escapeHtml(summaryRaw)).replace(/"/g, '&quot;')})">
-        ⬇ Export Report
-      </button>
+      <div style="display:flex;gap:0;flex-wrap:wrap;">
+        <button class="export-btn" onclick="exportReport(this, ${JSON.stringify(escapeHtml(summaryRaw)).replace(/"/g, '&quot;')})">
+          ⬇ Export Report
+        </button>
+        <button class="approve-btn" onclick="createServiceTicket(this, '${severity}')">
+          🎫 Approve &amp; Raise Ticket
+        </button>
+      </div>
     `;
 
     bubbleEl.appendChild(card);
@@ -1056,8 +1199,19 @@ function renderFormattedText(bubbleEl, textEl, fullText) {
       }
     }
   } else {
-    // Plain response — just set text
-    textEl.textContent = fullText;
+    // Check for questions with Options: format — start one-at-a-time sequence
+    const questions = parseQuestionsWithOptions(fullText);
+    const hasOptions = questions.some(q => q.options.length >= 2);
+
+    if (hasOptions) {
+      // Show only intro text (before first numbered question)
+      const firstQIdx = fullText.search(/^\d+\.\s+/m);
+      const introText = firstQIdx > 0 ? fullText.substring(0, firstQIdx).trim() : '';
+      textEl.textContent = introText;
+      startQuestionSequence(bubbleEl, introText, questions);
+    } else {
+      textEl.textContent = fullText;
+    }
 
     const wrapEl = bubbleEl.closest('.bubble-wrap');
     if (wrapEl) {
@@ -1067,6 +1221,120 @@ function renderFormattedText(bubbleEl, textEl, fullText) {
       }
     }
   }
+}
+
+/* ================================================================
+   ONE-AT-A-TIME QUESTION SEQUENCE
+================================================================ */
+function parseQuestionsWithOptions(fullText) {
+  const lines = fullText.split('\n');
+  const questions = [];
+  for (let i = 0; i < lines.length; i++) {
+    const qMatch = lines[i].match(/^(\d+)\.\s+(.+)/);
+    if (qMatch) {
+      let options = [];
+      // Look for Options: [A | B | C | D] on the next 1-2 lines
+      for (let j = i + 1; j < Math.min(i + 3, lines.length); j++) {
+        const optMatch = lines[j].match(/^\s*Options:\s*\[(.+)\]/i);
+        if (optMatch) {
+          options = optMatch[1].split('|').map(o => o.trim()).filter(Boolean);
+          break;
+        }
+      }
+      questions.push({ num: parseInt(qMatch[1]), text: qMatch[2].trim(), options });
+    }
+  }
+  return questions;
+}
+
+function startQuestionSequence(bubbleEl, introText, questions) {
+  currentQuestionSet = { questions, answers: [], bubbleEl };
+  showNextQuestion();
+}
+
+function showNextQuestion() {
+  if (!currentQuestionSet) return;
+  const { questions, answers, bubbleEl } = currentQuestionSet;
+  const idx = answers.length;
+  if (idx >= questions.length) return;
+
+  const q = questions[idx];
+
+  const qBlock = document.createElement('div');
+  qBlock.className = 'q-block';
+
+  const qText = document.createElement('p');
+  qText.className = 'q-text';
+  qText.textContent = q.text;
+  qBlock.appendChild(qText);
+
+  const chipsRow = document.createElement('div');
+  chipsRow.className = 'answer-chips-row';
+
+  q.options.forEach(opt => {
+    const chip = document.createElement('button');
+    chip.className = 'answer-chip';
+    chip.textContent = opt;
+    chip.onclick = () => recordAnswer(idx, opt, qBlock);
+    chipsRow.appendChild(chip);
+  });
+
+  qBlock.appendChild(chipsRow);
+  bubbleEl.appendChild(qBlock);
+  scrollToBottom();
+}
+
+function recordAnswer(idx, answer, qBlock) {
+  if (!currentQuestionSet) return;
+
+  // Lock this question's chips
+  qBlock.querySelectorAll('.answer-chip').forEach(c => {
+    c.disabled = true;
+    if (c.textContent === answer) c.classList.add('selected');
+  });
+
+  currentQuestionSet.answers.push(`${idx + 1}. ${answer}`);
+
+  const { questions, answers } = currentQuestionSet;
+
+  if (answers.length < questions.length) {
+    showNextQuestion();
+  } else {
+    // All answered — send combined answers to the model
+    const combined = currentQuestionSet.answers.join('\n');
+    currentQuestionSet = null;
+    const input = document.getElementById('msg-input');
+    input.value = combined;
+    autoResize(input);
+    sendMessage();
+  }
+}
+
+/* ================================================================
+   SERVICE TICKET
+================================================================ */
+function createServiceTicket(btn, severity) {
+  const ticketId = 'DBT-' + Date.now().toString(36).toUpperCase().slice(-6);
+  const now = new Date().toLocaleString();
+  const priorityMap = { CRITICAL: 'P1 — Critical', HIGH: 'P2 — High', MEDIUM: 'P3 — Medium', LOW: 'P4 — Low' };
+  const priority = priorityMap[severity] || 'P2 — High';
+
+  btn.disabled = true;
+  btn.textContent = '✅ Ticket Raised';
+
+  const card = btn.closest('.summary-card');
+  const ticket = document.createElement('div');
+  ticket.className = 'ticket-card';
+  ticket.innerHTML = `
+    <div class="ticket-header">🎫 Service Ticket Created</div>
+    <div class="ticket-row"><span>Ticket ID</span><strong>${ticketId}</strong></div>
+    <div class="ticket-row"><span>Priority</span><strong>${priority}</strong></div>
+    <div class="ticket-row"><span>Status</span><strong>Open</strong></div>
+    <div class="ticket-row"><span>Assigned To</span><strong>Maintenance Team</strong></div>
+    <div class="ticket-row"><span>Created</span><strong>${now}</strong></div>
+  `;
+  card.appendChild(ticket);
+  scrollToBottom();
 }
 
 /* ================================================================
@@ -1200,8 +1468,11 @@ async function startRecording() {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     audioChunks = [];
 
-    // Try preferred formats (Safari/Chrome compatible)
-    const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+    // Prefer mp4/aac — WhisperKit (AVFoundation) can decode it natively.
+    // Fall back to webm; transcribeAudio will convert webm→WAV before sending.
+    const mimeType = MediaRecorder.isTypeSupported('audio/mp4')
+      ? 'audio/mp4'
+      : MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
       ? 'audio/webm;codecs=opus'
       : MediaRecorder.isTypeSupported('audio/webm')
       ? 'audio/webm'
@@ -1257,9 +1528,13 @@ async function transcribeAudio(audioBlob, mimeType) {
   micBtn.disabled = true;
 
   try {
-    const ext = mimeType.includes('mp4') ? 'mp4' : 'webm';
+    // Always convert to WAV — browsers may record fragmented MP4 or WebM/Opus,
+    // neither of which AVFoundation (WhisperKit) can reliably decode.
+    // AudioContext.decodeAudioData handles any format the browser recorded.
+    const sendBlob = await convertToWav(audioBlob);
+
     const formData = new FormData();
-    formData.append('file', audioBlob, `recording.${ext}`);
+    formData.append('file', sendBlob, 'recording.wav');
     formData.append('model', 'whisper-1');
 
     const resp = await fetch(WHISPER_URL, {
@@ -1296,6 +1571,39 @@ async function transcribeAudio(audioBlob, mimeType) {
     micBtn.textContent = '🎙️';
     micBtn.disabled = false;
   }
+}
+
+// Decode any browser audio format and re-encode as 16-bit mono WAV.
+// WAV is universally supported by WhisperKit / AVFoundation.
+async function convertToWav(audioBlob) {
+  const audioCtx = new AudioContext();
+  const arrayBuf = await audioBlob.arrayBuffer();
+  const audioBuf = await audioCtx.decodeAudioData(arrayBuf);
+  audioCtx.close();
+
+  const numSamples = audioBuf.length;
+  const sampleRate = audioBuf.sampleRate;
+  const wavBuf = new ArrayBuffer(44 + numSamples * 2);
+  const view = new DataView(wavBuf);
+
+  const str = (off, s) => [...s].forEach((c, i) => view.setUint8(off + i, c.charCodeAt(0)));
+  str(0, 'RIFF'); view.setUint32(4, 36 + numSamples * 2, true);
+  str(8, 'WAVE'); str(12, 'fmt ');
+  view.setUint32(16, 16, true);           // PCM chunk size
+  view.setUint16(20, 1, true);            // PCM format
+  view.setUint16(22, 1, true);            // mono
+  view.setUint32(24, sampleRate, true);
+  view.setUint32(28, sampleRate * 2, true); // byte rate
+  view.setUint16(32, 2, true);            // block align
+  view.setUint16(34, 16, true);           // bits per sample
+  str(36, 'data'); view.setUint32(40, numSamples * 2, true);
+
+  const pcm = audioBuf.getChannelData(0);
+  for (let i = 0; i < numSamples; i++) {
+    const s = Math.max(-1, Math.min(1, pcm[i]));
+    view.setInt16(44 + i * 2, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+  }
+  return new Blob([wavBuf], { type: 'audio/wav' });
 }
 
 /* ================================================================

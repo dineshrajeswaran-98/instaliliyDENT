@@ -134,16 +134,29 @@ else
   done
 fi
 
-# Start WhisperKit server
+# Start WhisperKit server (on port 2023; CORS proxy on 2022 forwards to it)
 if [[ "$SKIP_WHISPER" == "false" ]] && [[ -f "/opt/homebrew/bin/whisperkit-cli" ]]; then
-  if lsof -ti:2022 &>/dev/null; then
-    log_ok "Port 2022 already in use (WhisperKit likely running)"
+  # Kill any stale process on port 2023
+  if lsof -ti:2023 &>/dev/null; then
+    log_ok "Port 2023 already in use (WhisperKit backend likely running)"
   else
-    log_info "Starting WhisperKit server on port 2022..."
+    log_info "Starting WhisperKit backend on port 2023..."
     log_info "(First run will download small.en model ~250MB — this may take a minute)"
-    /opt/homebrew/bin/whisperkit-cli serve --model small.en --port 2022 --host 127.0.0.1 >>/tmp/whisperkit-defectbot.log 2>&1 &
+    /opt/homebrew/bin/whisperkit-cli serve --model small.en --port 2023 --host 127.0.0.1 >>/tmp/whisperkit-defectbot.log 2>&1 &
     WHISPER_PID=$!
     log_ok "WhisperKit started (PID $WHISPER_PID) — log: /tmp/whisperkit-defectbot.log"
+  fi
+
+  # CORS proxy: sits on port 2022 (what the app calls), forwards to WhisperKit on 2023
+  # Needed because browsers block cross-origin responses without Access-Control-Allow-Origin.
+  if lsof -ti:2022 &>/dev/null; then
+    log_ok "Port 2022 already in use (CORS proxy likely running)"
+  else
+    log_info "Starting WhisperKit CORS proxy on port 2022..."
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    python3 "$SCRIPT_DIR/whisper_cors_proxy.py" >>/tmp/whisperkit-defectbot.log 2>&1 &
+    PROXY_PID=$!
+    log_ok "CORS proxy started (PID $PROXY_PID)"
   fi
 else
   log_warn "WhisperKit not started — voice input unavailable"
